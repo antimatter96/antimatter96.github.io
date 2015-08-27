@@ -1,4 +1,100 @@
+/*==============================================\
+RESET
+\==============================================*/
+ul{
+  padding-left: 0px;
+  list-style: none;
+  margin: 0px;
+}
+a{
+  text-decoration: none;
+  color: inherit;
+}
+a:visited{
+  color: inherit;
+}
 body{
-  background-color:#D30000;
-  color:white;
+  margin: 0px;
+}
+/*==============================================*/
+/* -- Vertical centering -- */
+.y_align{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+/*==============================================*/
+body{
+  font-family:"Consolas",sans-serif;
+}
+header#body_header , section ,footer#body_footer{
+	padding: 1.5% 2.75% 2% 2.75%;
+}
+
+header#body_header{
+  display: flex;
+  justify-content: space-between;
+}
+div.logo_header{
+  width: 30%;
+  font-size: 3rem;
+  font-weight: bold;
+  letter-spacing:0.2rem;
+}
+div.nav_header{
+  width: 60%;
+}
+ul.nav_header{
+  display: flex;
+  justify-content: flex-end;
+}
+ul.nav_header a{
+  width: 19.5%;
+  padding: 1% 1%;
+  text-align: center;
+  border-bottom: 3.5px white  solid;
+  box-sizing: border-box;
+  margin-left:3%;
+  transition:border-bottom-color 0.275s ease-in;
+  overflow: visible;
+  font-weight: lighter;
+  font-size:0.75rem;
+}
+ul.nav_header a:hover{
+  border-bottom-color:rgba(0,0,0,0.75);
+}
+section{
+  background-attachment:fixed;
+  position: relative;
+  height:40rem;
+}
+
+header.header_section{
+  font-weight:bold;
+  font-size: 3rem;
+  position: absolute;
+  top:5%;
+  padding:.5% 1.5%;
+}
+section.left>header.header_section{
+	text-align:left;
+	left:2.75%;
+	margin-right:2.75%;
+}
+section.right>header.header_section{
+	right: 2.75%;
+	text-align:right;
+	margin-left:2.75%;
+}
+section main{
+  margin-top:10%;
+  width: 85%;
+  height: 75%;
+  padding: 1.5% 1.5%;
+}
+section.right main{
+  margin-right:10%;
+}
+section.left main{
+  margin-left:10%;
 }
