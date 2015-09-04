@@ -72,6 +72,7 @@ section.left{
 	background-image:url("http://i.imgur.com/7yGRi1S.jpg");
 }
 section.right{
+	background-image:url("http://i.imgur.com/7yGRi1S.jpg");
 	-webkit-filter: invert(1);
 	filter: invert(1);
 }
