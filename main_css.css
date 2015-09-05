@@ -16,22 +16,21 @@ a:visited{
 body{
   margin: 0px;
 }
-/*==============================================*/
-/* -- Vertical centering -- */
+
 .y_align{
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
-/*==============================================*/
+
 body{
-  font-family:"Consolas",sans-serif;
+  font-family:"Courier New", Courier, monospace;
 }
-header#body_header , section ,footer#body_footer{
+#body_header , section ,#body_footer{
 	padding: 1.5% 2.75% 2% 2.75%;
 }
 
-header#body_header{
+#body_header{
   display: flex;
   justify-content: space-between;
 }
@@ -83,20 +82,19 @@ header.header_section{
   position: absolute;
   top:5%;
   padding:.5% 1.5%;
+  color:white;
+background-color:black;
 }
 section.left>header.header_section{
 	text-align:left;
 	left:2.75%;
 	margin-right:2.75%;
-	color:white;
-	background-color:black;
+
 }
 section.right>header.header_section{
 	right: 2.75%;
 	text-align:right;
 	margin-left:2.75%;
-	color:black;
-	background-color:white;
 }
 section main{
   margin-top:10%;
