@@ -119,12 +119,12 @@ section main{
   #body_header{
     flex-direction: column;
   }
-  .logo_header{
+  div.logo_header{
     font-size: 2rem;
     text-align: center;
     width: 100%;
   }
-  .nav_header{
+  div.nav_header{
     width: 100%;
   }
   #menu , #cross {
