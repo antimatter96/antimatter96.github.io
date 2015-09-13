@@ -115,7 +115,7 @@ section main{
   background-color: red;
 }
 
-@media screen and (max-width:640px) {
+@media screen and (max-width:480px) {
   #body_header{
     flex-direction: column;
   }
