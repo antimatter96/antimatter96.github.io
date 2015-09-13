@@ -27,7 +27,7 @@ body{
 body{
   font-family:monospace,sans-serif,"Consolas";
 }
-#body_header , section ,footer#body_footer{
+#body_header , section ,#body_footer{
 	padding: 1.5% 2.75% 2% 2.75%;
 }
 
@@ -59,13 +59,29 @@ ul.nav_header a{
   overflow: visible;
   font-weight: lighter;
   font-size:0.75rem;
-  word-break: break;
 }
 ul.nav_header a:hover{
   border-bottom-color:rgba(0,0,0,0.75);
 }
+
+#menu , #cross{
+	position:absolute;
+	font-weight:bold;
+	color:white;
+	background-color:#D30000;
+	text-align:center;
+	height:15px;
+	width:15px;
+	padding:10px;
+	right:1%;
+	top:1%;
+	display:none;
+}
+
+#menu{
+	z-index:2;
+}
 section{
-  background-attachment:fixed;
   display: flex;
   flex-direction: column;
   height:40rem;
@@ -82,34 +98,37 @@ header.header_section{
   font-weight:bold;
   font-size: 3rem;
   padding:.5% 1.5%;
+  color:white;
+  background-color:rgba(0, 0, 0, 0.75);
 }
 section.left>header.header_section{
 	align-self:flex-start;
-	color:white;
-	background-color:rgba(0, 0, 0, 0.75);
 }
 section.right>header.header_section{
 	align-self:flex-end;
-	color:white;
-	background-color:rgba(0, 0, 0, 0.75);
 }
+
 section main{
+  margin-top:1%;
   height: 75%;
   padding: 1.5% 1.5%;
   background-color: red;
 }
 
-@media screen and (max-width:480px) {
-  header#body_header{
+@media screen and (max-width:640px) {
+  #body_header{
     flex-direction: column;
   }
-  div.logo_header{
+  .logo_header{
     font-size: 2rem;
     text-align: center;
     width: 100%;
   }
-  div.nav_header{
+  .nav_header{
     width: 100%;
+  }
+  #menu , #cross {
+  	display:block;
   }
   ul.nav_header{
     width: 100%;
@@ -117,26 +136,40 @@ section main{
   }
   ul.nav_header a{
     width: 100%;
-    padding: 2% 1%;
+    padding: 2.5% 1%;
     margin:auto;
     border-bottom: 0px;
-    background-color: rgba(245,245,245,0.75);
-    border-left: 3.5px rgba(245,245,245,0.75)  solid;
-    border-right: 3.5px rgba(245,245,245,0.75)  solid;
-    transition:border-color 0.275s ease-in;
+    background-color: rgba(255,255,255,1);
   }
-  ul.nav_header a:focus{
-    background-color: rgba(235,235,235,0.75);
-    border-color:rgba(0,0,0,0.75);
+  ul.nav_header a:hover{
+  	background-color: rgba(205,205,205,1);
   }
-  section.right>header.header_section,section.left>header.header_section{
+  header.header_section{
     text-align:center;
+    padding:1% .5%;
     width:100%;
     margin: auto;
     font-size: 2rem;
-    padding:.5% .5%;
   }
   section main{
     height: 85%;
+  }
+  #nav::before{
+  	content:"A";
+  	display:block;
+  	background-color:blue;
+  	font-size:2.75em;
+  	visibility:hidden;
+  	z-index:-1;
+  }
+  #nav{
+  	position:absolute;
+  	margin:0;
+  	left:-100%;
+  	top:0%;
+  	transition:left 0.1s ease-in;
+  }
+  #nav:target{
+  	left:0;
   }
 }
