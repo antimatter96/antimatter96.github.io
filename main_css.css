@@ -26,14 +26,21 @@ body{
 /*==============================================*/
 body{
   font-family:monospace,sans-serif,"Consolas";
+  position:relative;
 }
-#body_header , section ,#body_footer{
+section ,#body_footer{
 	padding: 1.5% 2.75% 2% 2.75%;
 }
 
 #body_header{
+	padding: 1.5% 0% 2% 0%;
+	position:fixed;
+	width:100%;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
+  height:5rem;
+  background-color:white;
+  box-shadow:0px 1px 2px rgba(0,0,0,0.25);
 }
 div.logo_header{
   width: 30%;
@@ -43,25 +50,25 @@ div.logo_header{
 }
 div.nav_header{
   width: 60%;
+  align-self:center;
 }
 ul.nav_header{
   display: flex;
   justify-content: flex-end;
 }
 ul.nav_header a{
-  width: 19.5%;
-  padding: 1% 1%;
+  width: 15%;
+  padding: 5% 3%;
   text-align: center;
-  border-bottom: 3.5px white  solid;
-  box-sizing: border-box;
   margin-left:3%;
-  transition:border-bottom-color 0.275s ease-in;
   overflow: visible;
   font-weight: lighter;
-  font-size:0.75rem;
+  font-size:0.95rem;
 }
 ul.nav_header a:hover{
-  border-bottom-color:rgba(0,0,0,0.75);
+	font-weight: bold;
+	color:white;
+	background-color:rgba(0,0,0,0.5);
 }
 
 #menu , #cross{
@@ -73,30 +80,26 @@ ul.nav_header a:hover{
 	height:15px;
 	width:15px;
 	padding:10px;
-	right:1%;
-	top:1%;
+	right:0.75rem;
+	top:0.75rem;
 	display:none;
 }
 
 #menu{
 	z-index:2;
 }
+#brief{
+	padding-top:8.5rem;
+}
 section{
   display: flex;
   flex-direction: column;
-  height:40rem;
+  height:32rem;
   justify-content: space-around;
 }
-section.left{
-  background-color: #D30000;
-}
-section.right{
-  background-color: #0f4569;
-}
-
 header.header_section{
   font-weight:bold;
-  font-size: 3rem;
+  font-size: 2.5rem;
   padding:.5% 1.5%;
   color:white;
   background-color:rgba(0, 0, 0, 0.75);
@@ -112,13 +115,17 @@ section main{
   margin-top:1%;
   height: 75%;
   padding: 1.5% 1.5%;
-  background-color: red;
 }
 
 @media screen and (max-width:540px) {
   #body_header{
     flex-direction: column;
+	height: 3rem;
+	position:absolute;
   }
+  #brief{
+	padding-top:3.5rem;
+}
   div.logo_header{
     font-size: 2rem;
     text-align: center;
@@ -126,13 +133,20 @@ section main{
   }
   div.nav_header{
     width: 100%;
+	height:15rem;
+	background-color:white;
+	box-shadow:0px 1px 2px rgba(0,0,0,0.25);
   }
   #menu , #cross {
-  	display:block;
+	    display: flex;
+		position:fixed;
+    justify-content: center;
+    flex-direction: column;
   }
   ul.nav_header{
     width: 100%;
     flex-direction: column;
+	height:100%;
   }
   ul.nav_header a{
     width: 100%;
@@ -140,9 +154,6 @@ section main{
     margin:auto;
     border-bottom: 0px;
     background-color: rgba(255,255,255,1);
-  }
-  ul.nav_header a:hover{
-  	background-color: rgba(205,205,205,1);
   }
   header.header_section{
     text-align:center;
@@ -153,14 +164,6 @@ section main{
   }
   section main{
     height: 85%;
-  }
-  #nav::before{
-  	content:"A";
-  	display:block;
-  	background-color:blue;
-  	font-size:2.75em;
-  	visibility:hidden;
-  	z-index:-1;
   }
   #nav{
   	position:absolute;
