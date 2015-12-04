@@ -1,17 +1,32 @@
 var smoothscroller = (function(){
 	function scroller(e){
 		e.preventDefault();
+		var correction = document.getElementById("body_header").offsetHeight;
 		target = (document.getElementById(this.getAttribute('href').split('#')[1])).offsetTop;
 		var myinterval;
-		function scroll() {
-			if (window.scrollY >=target) {
-				clearInterval(myinterval);
-			} 
-			else {
-				window.scrollTo(window.scrollX, window.scrollY + 10);
+		if(window.scrollY + correction <= target){
+			function scroll1() {
+				if (window.scrollY + correction>=target) {
+					clearInterval(myinterval);
+				} 
+				else {
+					window.scrollTo(window.scrollX, window.scrollY + 5);
+				}
 			}
-        }
-		myinterval = setInterval(scroll,1);
+			myinterval = setInterval(scroll1,0.05);
+		}
+		else{
+			function scroll() {
+				if (window.scrollY + correction < target) {
+					clearInterval(myinterval);
+				} 
+				else {
+					window.scrollTo(window.scrollX, window.scrollY - 5);
+				}
+			}
+			myinterval = setInterval(scroll,0.05);
+		}
+		
 	}
 	return{
 		init:function(){
