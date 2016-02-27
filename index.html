@@ -1,81 +1,81 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <title>Arpit Jain</title>
-    <meta name=viewport content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="main_css.css" type="text/css">
-    <script type="text/javascript" src="main_js.js"></script>
-  </head>
-  <body>
-	   <header id="body_header">
-	   <a href="#nav"><div id="menu">+</div></a>
-	   <a href="#"><div id="cross">X</div></a>
-       <div class="logo_header y_align">
-        Arpit Jain
-       </div>
-      <div class="nav_header" id="nav">
-        <ul class="nav_header">
-          <a href="#knowledge" class="y_align"><li>Knowledge and Experience</li></a>
-          <a href="#education" class="y_align"><li>Education and Qualifications</li></a>
-          <a href="#links-projects" class="y_align"><li>Projects</li></a>
-          <a href="#others" class="y_align"><li>Other Interests</li></a>
-          <a href="#contact" class="y_align"><li>Contact</li></a>
-        </ul>
-      </div>
-     </header>
-     <section id="brief" class="left">
-      <header class="header_section">
-        tl;dr
-      </header>
-	    <main>
-      </main>
-     </section>
-     <section id="knowledge" class="right">
-        <header class="header_section">
-  		      Knowledge and Experience
-        </header>
-        <main>
-        </main>
-      </section>
-      <section id="education" class="left">
-        <header class="header_section">
-          Education and Qualification
-        </header>
-        <main>
-        </main>
-      </section>
-      <section id="links-projects" class="right">
-        <header class="header_section">
-          Projects
-        </header>
-        <main>
-        </main>
-      </section>
-      <section id="others"class="left">
-        <header class="header_section">
-          Other Interests
-        </header>
-        <main>
-        </main>
-      </section>
-      <section id="contact" class="right">
-        <header class="header_section">
-          Contact
-        </header>
-        <main>
-          Call me maybe ?
-        </main>
-      </section>
-      <footer id="body_footer">
-        Footer
-      </footer>
-	<script>
-		function init(){
-			smoothscroller.init();
-			menutoggle.init();
-		}
-		window.addEventListener('load',init);
-	</script>
-  </body>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" type="text/css" href="index.css">
+		<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
+		<script src="index.js"></script>
+	</head>
+	<body>
+		<header id="main_header">
+			<div id="head_name">
+				Arpit Jain
+			</div>
+			<input type="checkbox" id="menu_btn">
+			<label for="menu_btn" onclick></label>
+			<nav>
+				<ul>
+					<li><a href="#second">Knowledge & Experience</a></li>
+					<li><a href="#third">Education & Qualifications</a></li>
+					<li><a href="#fourth">Projects</a></li>
+					<li><a href="#fifth">Other Interests</a></li>
+					<li><a href="#sixth">Contact</a></li>
+				</ul>
+			</nav>
+		</header>
+		<section id="first">
+			<div class="section-header">tl;dr</div>
+			<div class="section-content">
+				Currently pursuing Bachelors of Engineering in Information Technology from Netaji Subhas Institute of Technology<br>
+				
+			</div>
+		</section>
+		<section id="second">
+			<div class="section-header">Knowledge & Experience</div>
+			<div class="section-content">
+				C/C++
+				HTML
+				CSS
+				Javascript
+				jQuery
+				NodeJs
+				MongoDB
+				MySQL
+				Pyhton
+				Django
+			</div>			
+		</section>
+		<section id="third">
+			<div class="section-header">Education & Qualifications</div>
+			<div class="section-content">
+				Currently pursuing Bachelors of Engineering in Information Technology from Netaji Subhas Institute of Technology<br>
+				All India Senior School Certificate Examination - CBSE
+				Delhi Public School Faridabad ( 2012-2014 )
+				Aggregate: 95%
+				All India Secondary School Certificate Examination - CBSE
+				Delhi Public School Faridabad ( 2000-2012 )
+				CGPA: 10.00
+			</div>		
+		</section>
+		<section id="fourth">
+			<div class="section-header">Projects</div>
+			<div class="section-content"></div>			
+		</section>
+		<section id="fifth">
+			<div class="section-header">Other Interests</div>
+			<div class="section-content"></div>
+		</section>
+		<section id="sixth">
+			<div class="section-header">Contact</div>
+			<div class="section-content"></div>
+		</section>		
+		<script>
+			function nit(){
+				displaceHeader.init('main_header');
+				correctPadding.init('menu_btn','main_header');
+			}
+			window.addEventListener('load',nit);	
+		</script>
+	</body>
 </html>
