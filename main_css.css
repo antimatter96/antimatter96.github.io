@@ -30,7 +30,7 @@ header{
 	margin:auto;
 	background-color:#ffffff;
 	border-bottom:1px rgba(0,0,0,0.25) solid;
-	color:#64dd17;
+	color:#64aa17;
 }
 
 header #head_name{
@@ -83,7 +83,7 @@ nav ul li{
 	display:flex;
 }
 nav ul  li a{
-	color:#64dd17;
+	color:#64aa17;
 	margin:auto;
 	padding: 1rem 0.75rem;
 	border-radius:6px;
