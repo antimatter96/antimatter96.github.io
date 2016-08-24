@@ -143,6 +143,11 @@ section{
 	border-radius:3px;
 }
 
+#skill-list ul li span.devicon2 {
+	width: 4rem;
+	margin-bottom: -0.5625rem;
+}
+
 #skill-list ul li span{
 	font-size:2rem;
 }
