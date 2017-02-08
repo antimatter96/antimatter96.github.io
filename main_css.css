@@ -159,6 +159,16 @@ section{
 	margin-bottom:0.5rem;
 }
 
+#projects{
+	display:flex;
+	justify-content:space-around;
+	flex-wrap:wrap;
+}
+.project{
+	width:45%;
+	margin-bottom:0.75rem;
+}
+
 @media screen and (max-width:720px){
 	body{
 		padding-top:5.125rem;
