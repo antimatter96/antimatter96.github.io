@@ -1,0 +1,96 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="Content-type" content="text/html; charset=UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Arpit</title>
+		<link rel="stylesheet" type="text/css" href="main_css.css">
+	</head>
+	<body>
+		<header id="main_header">
+			<div id="head_name">
+				Arpit Jain
+			</div>
+			<input type="checkbox" id="menu_btn">
+			<label for="menu_btn" onclick></label>
+			<nav>
+				<ul>
+					<li><a href="./index.html#second">Skill Set</a></li>
+					<li><a href="./index.html#third">Education</a></li>
+					<li><a href="./index.html#fourth">Projects</a></li>
+					<li><a href="./index.html#fifth">Other Interests</a></li>
+					<li><a href="./index.html#sixth">Contact</a></li>
+				</ul>
+			</nav>
+		</header>
+		<section id="second">
+			<div class="section-header">Projects</div>
+			<div class="section-content">
+				<div class="project-full">
+					<h1>Otter<h1>
+					<img src="./tinified/awter.jpg">
+					<h3>Ability to shorten with passwords and also get the QR code for the link</h3>
+					<h4>Current version <a href="https://awter.herokuapp.com">here</a></h4>
+					<hr>
+					<h2><a id="Stack_5"></a>Stack</h2>
+					<ul>
+						<li>Nodejs</li>
+						<li>Express.js</li>
+						<li>Redis</li>
+					</ul>
+					<p>Will be hosted on zeit now</p>
+					<h2><a id="Basic_Functioning_12"></a>Basic Functioning</h2>
+					<ul>
+						<li>User enters URL to shorten</li>
+						<li>Create random string of length 6 consisting of [a-z A-z 0-9]<br>
+						-&gt; Check in redis if this string exists. If it does then append extra 3 characters</li>
+						<li>Save in redis</li>
+						<li>Redirect user to page with shortened link and generate QR code using <a href="https://github.com/lrsjng/kjua">kjua QR code generator</a></li>
+					</ul>
+					<h2><a id="V1_19"></a>V1</h2>
+					<ul>
+						<li>The first version lacked support for passwords</li>
+						<li>Data was stored as key-value  :   <code>SET shortURl longUrl</code></li>
+					</ul>
+					<h2><a id="V2_25"></a>V2</h2>
+					<ul>
+						<li>Password support was added</li>
+						<li>Minimum length of passwords is 4</li>
+						<li><code>bcryptjs</code> is used to generate the password’s hash (salt is added using <code>bcryptjs</code>)</li>
+						<li>The url is stored in plaintext while the password’s hash is stored</li>
+						<li>Data was stored using redis hashes (string field to string value mapping) :<br>
+						<code>HMSET shortUrl url longUrl pwd passwordHash</code></li>
+						<li>If password is not opted for then a <code>&quot;no&quot;</code> is saved instead of <code>&quot;passwordHash&quot;</code></li>
+					</ul>
+					<h2>V3</h2>
+					<ul>
+						<li>The longUrl is encrypted using symetric-key ("AES-192-CTR") with the password as the key . If the password matches the one in redis then the longUrl will be decrypted using it .This ensures that longUrl are not visible even to db admins.</li>
+						<li>CSRF is implemented</li>
+						<li>Basic limiting on number of password attempts is introduced</li>
+					</ul>
+					<h3>Need to Add nonce to AES</h3>
+					<h2>Upcoming</h2>
+					<h3><span style="text-decoration:line-through;">Passing password in URL will be removed, Password would have to be entered in seperate page </span> DONE</h3>
+					<ul>
+						<li>Protection : Based on OWASP guidelines</li>
+						<li>Basic rate limiting</li>
+						<li>Compression</li>
+						<li>Caching</li>
+					</ul>
+					<hr>
+					<h1><a id="LICENSE_47"></a>LICENSE</h1>
+					<h3><a id="GPLhttpswwwgnuorglicensesgpl30txt_49"></a><a href="https://www.gnu.org/licenses/gpl-3.0.txt">GPL</a></h3>	
+				</div>
+			</div>
+		</section>
+		<script src="main_js.js"></script>
+		<script>
+			function nit(){
+				displaceHeader.init('main_header');
+				correctPadding.init('menu_btn','main_header');
+			}
+			window.addEventListener('load',nit);	
+		</script>
+	</body>
+</html>

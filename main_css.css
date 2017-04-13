@@ -9,7 +9,6 @@ a:visited{
 
 ul{
 	margin:0;
-	list-style:none;
 	padding:0;
 }
 
@@ -31,6 +30,7 @@ header{
 	background-color:#ffffff;
 	border-bottom:1px rgba(0,0,0,0.25) solid;
 	color:#64aa17;
+	z-index:10;
 }
 
 header #head_name{
@@ -71,7 +71,7 @@ header nav{
 
 
 nav ul{
-	
+	list-style:none;
 	display:flex;
 	width: 100%;
 	/* height: 100%; */
@@ -86,7 +86,7 @@ nav ul  li a{
 	margin:auto;
 	padding: 1rem 0.75rem;
 	border-radius:6px;
-    	text-align: center;
+    text-align: center;
 	overflow:visible;
 	word-break:break-word;
 	font-size:0.85rem;
@@ -97,67 +97,129 @@ nav ul  li a:hover{
 }
 
 section{
-	min-height:40rem;
+	min-height:35rem;
 	padding:1rem 5rem;
 	overflow:auto;
+	background:white;
 }
-/*
+
 #first{
-	background-color:#4285f4;
+	background-color:#64DD17;
+}
+#first .section-content{
+	font-family:'mononoki';
 }
 
 #second{
-	background-color:#ea4335;
+	background-color:#fefefe;
 }
 
 #third{
-	background-color:#ffe500;
+	background-color:#000;
+	color:#fff;
 }
 
 #fourth{
-	background-color:#4285f4;
+	background-color:#0091EA;
 }
 
 #fifth{
-	background-color:#34a853;
+	min-height:20rem;
+	background-color:#64DD17;
 }
 
 #sixth{
-	background-color:#ea4335;
-}
-*/
-.section-header{
-	font-size:2.5rem;
-	padding:1rem 0rem;
+	min-height:20rem;
+	background-color:#ffffff;
 }
 
-#skill-list ul li{
-	font-family:"Montserrat" , sans-serif;
+.section-header{
+	font-size:2.5rem;
+	padding:1rem 0rem 0.5rem 0rem;
+	display:inline-block;
+	border-bottom:2px solid rgba(0,0,0,0.25);
+	margin-bottom:2rem;
+}
+
+.edu-item{
+	padding:0.75rem 0.5rem;
+	display:flex;
+	flex-wrap:wrap;
+	justify-content:space-between;
+	border-bottom:1px solid rgba(255,255,255,0.95)
+}
+
+.edu-head,.edu-inst,.edu-year,.edu-marks{
+	display:inline-block;
+	margin-bottom:0.5rem;
+}
+.edu-head{
+	width:75%;
+	font-size:1rem;
+	font-weight:900;
+}
+.edu-inst{
+	font-weight:700;
+	width:75%;
+}
+.edu-year{
+	width:20%;
+	text-align:right;
+}
+
+.edu-marks{
+	width:20%;
+	text-align:right;
+}
+
+.edu-info{
+	font-size:0.95rem;
+	font-weight:400;
+	width:100%;
+}
+
+ul.two-three-col{
+	display:flex;
+	justify-content:space-between;
+	flex-wrap:wrap;
+	padding:0;
+	margin-left:1rem;
+}
+
+ul.two-three-col li{
+	font-size:0.95rem;
+	margin-bottom:0.25rem;
+	width:30%;
+}
+
+#skill-list{
 	display:flex;
 	font-size:1.5rem;
 	align-items:center;
-	padding:0.5rem 0.75rem;
 	justify-content:space-between;
+	flex-wrap:wrap;
+}
+
+.skill-item{
+	padding:1rem 0.25rem 0rem 0.25rem;
+	margin-bottom:1rem;
+	border: 1px solid rgba(0,0,0,0.25);
+    box-shadow: 2px 2px 4px 0px rgba(0,0,0,0.5);
+	width: 20%;
+	text-align:center;
+}
+
+.skill-item-image img{
+	width:50%;
+}
+
+.skill-item-name{
 	margin-top:0.5rem;
-	background-color:rgba(255,255,255,1);
-	border-radius:3px;
+	padding:0.5rem 0.25rem 0.5rem 0.25rem;
+	font-weight:900;
+	border-top:1px solid rgba(0,0,0,0.25);
 }
 
-#skill-list ul li span.devicon2 {
-	width: 4rem;
-	margin-bottom: -0.5625rem;
-}
-
-#skill-list ul li span{
-	font-size:2rem;
-}
-
-#skill-list ul li:first-child{
-	margin-top:0px;
-}
-#skill-list ul li:last-child{
-	margin-bottom:0.5rem;
-}
 
 #projects{
 	display:flex;
@@ -165,8 +227,47 @@ section{
 	flex-wrap:wrap;
 }
 .project{
-	width:45%;
+	width:30%;
 	margin-bottom:0.75rem;
+	min-height: 200px;
+    box-shadow: 2px 2px 10px 0px rgba(0,0,0,0.125);
+    padding: 1rem 1rem 0.5rem 1rem;
+	display:flex;
+	flex-direction:column;
+	justify-content:space-between;
+	background:white;
+}
+
+.project-title{
+	font-weight:900;
+	font-size:1.5rem;
+	padding:0.5rem 0rem;
+	border-bottom:1px solid rgba(0,0,0,0.25);
+	margin-bottom:1rem;
+}
+
+.project-desc{
+	padding:0rem 0rem 0.5rem 0rem;
+	margin-bottom:1rem;
+}
+.project-link{
+	padding-top:0.5rem;
+	border-top:1px solid rgba(0,0,0,0.25);
+}
+
+.project-link a{
+	display:block;
+	padding:0.5rem 0.25rem;
+	text-align:center;
+	background:white;
+	box-shadow: 2px 2px 7px 0px rgba(0,0,0,0.125);
+	border:1px solid rgba(0,0,0,0.125);
+}
+
+.project-link a:hover{
+	
+	box-shadow: 2px 2px 7px 0px rgba(50,50,255,0.25);
+	border:1px solid rgba(50,50,255,0.25);
 }
 
 @media screen and (max-width:720px){
@@ -236,14 +337,74 @@ section{
 		padding:0rem 1rem;
 	}
 	
+	.edu-head{
+		width:100%;
+		order:1;
+	}
+	.edu-inst{
+		width:100%;
+		order:1;
+	}
+	.edu-year{
+		width:45%;
+		order:3;
+		text-align:left;
+	}
+	.edu-info{
+		width:100%;
+		order:5;
+	}
+	.edu-marks{
+		width:45%;
+		order:4;
+		text-align:right;
+	}
+	
+	ul.two-three-col li{
+		width:47.5%;
+	}
+
 	.section-header{
 		font-size:2rem;
 	}
 	
+	#skill-list{
+		display:flex;
+		font-size:1rem;
+		align-items:center;
+		justify-content:space-between;
+		flex-wrap:wrap;
+	}
+	
+	.skill-item{
+		padding:1rem 0.25rem 0rem 0.25rem;
+		margin-bottom:1rem;
+		border: 1px solid rgba(0,0,0,0.25);
+		box-shadow: 2px 2px 4px 0px rgba(0,0,0,0.5);
+		width: 45%;
+		text-align:center;
+	}
+	
+	.project{
+		width:95%;
+		margin-bottom:0.75rem;
+		min-height: 200px;
+		box-shadow: 2px 2px 10px 0px rgba(0,0,0,0.125);
+		padding: 1rem 1rem 0.5rem 1rem;
+		display:flex;
+		flex-direction:column;
+		justify-content:space-between;
+		background:white;
+	}
 }
 
 @media screen and (max-width:360px){
 	header #head_name{
 		width:90%;
 	}
+}
+
+code {
+    background: #eee;
+    padding: 0px 5px;
 }
