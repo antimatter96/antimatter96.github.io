@@ -17,6 +17,7 @@
 			<nav>
 				<ul>
 					<li><a href="#second">Skill Set</a></li>
+					<li><a href="#third-">Experience</a></li>
 					<li><a href="#third">Education</a></li>
 					<li><a href="#fourth">Projects</a></li>
 					<li><a href="#fifth">Other Interests</a></li>
@@ -36,6 +37,56 @@
 				Currently I am learning : Go
 				<p>I am also spending some time on React and Rust</p>
 				</h3>
+			</div>
+		</section>
+		<section id="third-">
+			<div class="section-header">Experience</div>
+			<div class="section-content">
+				<div class="edu">
+					<div class="edu-item">
+						<span class="edu-head">BrowserStack</span>
+						<span class="edu-year">April 2020 - <i>present</i></span>
+						<span class="edu-inst">Senior Software Engineer</span>
+						<span class="edu-marks"></span>
+						<div class="edu-info">
+							<ul class="simpe-col">
+								<li>Helped in unifying instrumentation across the organisation. Responsible for stopping unused metric collection, and
+									migrating existing alerts, reports, and dashboards.</li>
+							</ul>
+						</div>
+					</div>
+					<div class="edu-item">
+						<span class="edu-head">BrowserStack</span>
+						<span class="edu-year">June 2018 - March 2020</span>
+						<span class="edu-inst">Software Engineer</span>
+						<span class="edu-marks"></span>
+						<div class="edu-info">
+							<ul class="simpe-col ">
+								<li>Designed and developed tools for handling a business-critical service. Handles thousands of custom HTTP/TCP jobs per minute. Made it configurable, highly available, and horizontally scale-able.<br>Used Ruby, Nodejs, Jest, and Redis.</li>
+								<li>Led the integration of OAuth authorization to our existing JIRA implementation. Was responsible for research, planning, and final delivery.</li>
+								<li>Increased average FPS for users using our Windows platform by at-least 50</li>
+								<li>Helped in stabilising our WebRTC streaming, and Devtools feature</li>
+							</ul>
+						</div>
+					</div>
+					<div class="edu-item">
+						<span class="edu-head">cmpute.io <i>acquired by Cisco</i></span>
+						<span class="edu-year">May 2017 to July 2017</span>
+						<span class="edu-inst">Software Engineering Intern</span>
+						<span class="edu-marks"></span>
+						<div class="edu-info">
+						<ul class="simpe-col ">
+							<li>Created a tool to calculate potential AWS savings by shifting jobs to spot instances. Picked out the best possible
+								alternative if the instance is not available as a spot instance. Calculated savings for all instances as well as individual
+								services like EMR, Ops Work, etc.</li>
+							<li>To be integrated into the web console for existing users, and as a web app for public use. Created the web app along
+								with a proxy server to restrict public endpoints. Automated the task of obtaining read-only permissions for users using
+								AWS Lambda and SNS.</li>
+							<li>Made extensive use of Goroutines, channels, mutexes and waiting groups to speed up the data gathering process.</li>
+							<li>Used Go, AWS SDK for Go, MySQL, Redis, and Swagger.</li>
+						</ul>
+					</div>
+				</div>	
 			</div>
 		</section>
 		<section id="second">
@@ -104,20 +155,13 @@
 			<div class="section-header">Projects</div>
 			<div class="section-content" id="projects">
 				<div class="project">
-					<div class="project-title">ECommerce Website</div>
-					<div class="project-desc">
-						Built a retail based e-commerce website using ASP.NET Web-forms, MySQL, Node.js.<br>
-						Implemented product search, cart management, order placing and account management
-					</div>
-					<div class="project-link"><a href="http://goo.gl/UBeKoJ">Link</a></div>
-				</div>
-				<div class="project">
 					<div class="project-title">URL Shortner</div>
 					<div class="project-desc">
-						Built a URL shortener using Nodejs, Express and Redis.
-						<br>Can shorten any link and generate a corresponding QR code.<br>Optional password protection can restrict access.<br>Deployed on Heroku and Zeit now.
+						Built a URL shortener using Nodejs, Express, and Redis
+						<br>Can shorten any link and generate a corresponding QR code.<br>Optional password protection can restrict access.<br>
+						Also created an alternate implentation using Go and Redis/MySQL
 					</div>
-					<div class="project-link"><a href="./otter.html">Link</a></div>
+					<div class="project-link"><a href="./otter">Node implentation</a><br><a href="./awter-go">Go implentation</a></div>
 				</div>
 				<div class="project">
 					<div class="project-title">Online Quiz</div>
@@ -127,21 +171,12 @@
 					<div class="project-link"><a href="http://goo.gl/UBeKoJ">Link</a></div>
 				</div>
 				<div class="project">
-					<div class="project-title">Imgur Proxy</div>
+					<div class="project-title">BattleShips</div>
 					<div class="project-desc">
-						Built a simple Imgur proxy using Nodejs and Python.<br>Nodejs runs the server and creates child processes to get the images using Python.
+						Built an online and real-time version of BattleShips with the help of Node.js, and Socket.io.
 					</div>
-					<div class="project-link"><a href="http://goo.gl/UBeKoJ">Link</a></div>
+					<div class="project-link"><a href="./battleships">Link</a></div>
 				</div>
-				<div class="project">
-					<div class="project-title">Small Scripts</div>
-					<div class="project-desc">
-						` Codeforces Helper<br>
-						` Instagram Image Downloader
-					</div>
-					<div class="project-link"><a href="http://goo.gl/UBeKoJ">Link</a></div>
-				</div>
-
 			</div>
 		</section>
 		<section id="third">
