@@ -17,7 +17,7 @@ body {
 	margin: auto;
 	position: relative;
 	padding-top: 5.125rem;
-	font-family: "Open Sans", "sans-serif";
+	font-family: "JetBrains Mono", "Fira Code", "Open Sans", "sans-serif";
 }
 
 header {
@@ -108,29 +108,54 @@ section {
 }
 
 #first {
-	background-color: #64DD17;
-}
-
-#first .section-content {
-	font-family: 'mononoki';
+	background: #DCE35B;
+	/* fallback for old browsers */
+	background: -webkit-linear-gradient(to right, #45B649, #DCE35B);
+	/* Chrome 10-25, Safari 5.1-6 */
+	background: linear-gradient(to right, #45B649, #DCE35B);
+	/* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
 #second {
-	background-color: #fefefe;
+	background: #F09819;
+	/* fallback for old browsers */
+	background: -webkit-linear-gradient(to top, #EDDE5D, #F09819);
+	/* Chrome 10-25, Safari 5.1-6 */
+	background: linear-gradient(to top, #EDDE5D, #F09819);
+	/* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
 }
 
 #third {
-	background-color: #000;
+	background: #232526;
+	/* fallback for old browsers */
+	background: -webkit-linear-gradient(to right, #414345, #232526);
+	/* Chrome 10-25, Safari 5.1-6 */
+	background: linear-gradient(to right, #414345, #232526);
+	/* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+
 	color: #fff;
 }
 
 #fourth {
-	background-color: #0091EA;
+	background: #00c6ff;
+	/* fallback for old browsers */
+	background: -webkit-linear-gradient(to right, #0072ff, #00c6ff);
+	/* Chrome 10-25, Safari 5.1-6 */
+	background: linear-gradient(to right, #0072ff, #00c6ff);
+	/* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
 #fifth {
+	background: #e53935;
+	/* fallback for old browsers */
+	background: -webkit-linear-gradient(to right, #e35d5b, #e53935);
+	/* Chrome 10-25, Safari 5.1-6 */
+	background: linear-gradient(to right, #e35d5b, #e53935);
+	/* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
 	min-height: 20rem;
-	background-color: #64DD17;
 }
 
 #sixth {
@@ -144,6 +169,7 @@ section {
 	display: inline-block;
 	border-bottom: 2px solid rgba(0, 0, 0, 0.25);
 	margin-bottom: 2rem;
+	font-weight: 900;
 }
 
 .edu-item {
@@ -218,6 +244,7 @@ ul.two-three-col li {
 	box-shadow: 2px 2px 4px 0px rgba(0, 0, 0, 0.5);
 	width: 20%;
 	text-align: center;
+	background-color: white;
 }
 
 .skill-item-image img {
