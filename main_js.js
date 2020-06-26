@@ -1,19 +1,16 @@
-var displaceHeader = (function() {
-	var target;	
+var displaceHeader = (function () {
+	var target;
 	var limit;
 	var flag = false;
 	function popp() {
-		if(window.scrollY >= limit && !flag) {
+		if (window.scrollY >= limit && !flag) {
 			target.classList.add("displaced");
-			bo = flag;
-		}
-		else if(window.scrollY <= limit) {
-			bo = false;
+		} else if (window.scrollY <= limit) {
 			target.classList.remove("displaced");
 		}
 	}
 	return {
-		init:function(item) {
+		init: function (item) {
 			target = document.getElementById(item);
 			limit = target.offsetHeight;
 			window.addEventListener("scroll", popp);
@@ -21,23 +18,23 @@ var displaceHeader = (function() {
 	};
 })();
 
-var correctPadding = (function() {
+var correctPadding = (function () {
 	var target;
 	var nuisance;
-	var possibletargets;	
+	var possibletargets;
 	function func(e) {
 		e.preventDefault();
 		target.checked = false;
-		var whereTo = document.getElementById(this.attributes.href.value.split('#')[1]);
+		var whereTo = document.getElementById(this.attributes.href.value.split("#")[1]);
 		window.scroll(0, whereTo.offsetTop - nuisance);
 	}
 	return {
-		init:function(item, item2) {
+		init: function (item, item2) {
 			target = document.getElementById(item);
 			nuisance = document.getElementById(item2).offsetHeight;
-			possibletargets = document.getElementsByTagName('a');
-			for(var i=0;i<possibletargets.length;i++) {
-				if(possibletargets[i].attributes.href.value[0] == '#') {
+			possibletargets = document.getElementsByTagName("a");
+			for (var i = 0; i < possibletargets.length; i++) {
+				if (possibletargets[i].attributes.href.value[0] == "#") {
 					possibletargets[i].addEventListener("click", func);
 				}
 			}
