@@ -41,7 +41,7 @@ header #head_name {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: "Open Sans", sans-serif;
+  font-family: "IBM Plex Sans", "Open Sans", sans-serif;
 }
 
 header.displaced {
@@ -261,7 +261,8 @@ ul.simpe-col li {
   flex-wrap: wrap;
 }
 
-.skill-item, .skill-item-small {
+.skill-item,
+.skill-item-small {
   padding: 1rem 0.25rem 0rem 0.25rem;
   margin-bottom: 1rem;
   border: 1px solid rgba(0, 0, 0, 0.125);
@@ -362,7 +363,7 @@ ul.simpe-col li {
     display: block;
   }
 
-  input:checked ~ nav {
+  input:checked~nav {
     display: block;
   }
 
@@ -382,7 +383,7 @@ ul.simpe-col li {
     transform: scaleX(1.5);
   }
 
-  input:checked ~ label[for="menu_btn"]::after {
+  input:checked~label[for="menu_btn"]::after {
     content: "×";
     font-weight: normal;
     font-family: "Open Sans", sans-serif;
@@ -453,7 +454,8 @@ ul.simpe-col li {
     flex-wrap: wrap;
   }
 
-  .skill-item, .skill-item-small {
+  .skill-item,
+  .skill-item-small {
     padding: 1rem 0.25rem 0rem 0.25rem;
     margin-bottom: 1rem;
     border: 1px solid rgba(0, 0, 0, 0.125);
