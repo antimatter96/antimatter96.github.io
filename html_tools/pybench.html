@@ -1,0 +1,651 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pybench visualizer</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Syne:wght@400;700;800&display=swap");
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        --bg: #0d0d0d;
+        --surface: #161616;
+        --surface2: #1e1e1e;
+        --border: #2a2a2a;
+        --accent: #c8f542;
+        --accent2: #42f5c8;
+        --text: #f0f0f0;
+        --muted: #666;
+        --good: #42f5c8;
+        --bad: #f5426e;
+        --mono: "JetBrains Mono", monospace;
+        --sans: "Syne", sans-serif;
+      }
+
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        min-height: 100vh;
+        padding: 2rem;
+      }
+
+      header {
+        display: flex;
+        align-items: baseline;
+        gap: 1rem;
+        margin-bottom: 2.5rem;
+      }
+
+      header h1 {
+        font-size: 2rem;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+      }
+
+      header h1 span {
+        color: var(--accent);
+      }
+
+      header p {
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--muted);
+      }
+
+      .input-area {
+        position: relative;
+        margin-bottom: 2rem;
+      }
+
+      .input-area label {
+        display: block;
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-bottom: 8px;
+      }
+
+      textarea {
+        width: 100%;
+        height: 180px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        color: var(--text);
+        font-family: var(--mono);
+        font-size: 12px;
+        line-height: 1.6;
+        padding: 1rem;
+        resize: vertical;
+        outline: none;
+        transition: border-color 0.2s;
+      }
+
+      textarea:focus {
+        border-color: var(--accent);
+      }
+      textarea::placeholder {
+        color: var(--muted);
+      }
+
+      .input-row {
+        display: flex;
+        gap: 16px;
+        margin-bottom: 0;
+      }
+
+      .input-row .input-area {
+        flex: 1;
+        margin-bottom: 0;
+      }
+
+      .btn-row {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+      }
+
+      button {
+        font-family: var(--mono);
+        font-size: 12px;
+        font-weight: 600;
+        padding: 8px 20px;
+        border-radius: 4px;
+        border: none;
+        cursor: pointer;
+        transition:
+          opacity 0.15s,
+          transform 0.1s;
+      }
+
+      button:active {
+        transform: scale(0.97);
+      }
+
+      .btn-primary {
+        background: var(--accent);
+        color: #0d0d0d;
+      }
+
+      .btn-primary:hover {
+        opacity: 0.88;
+      }
+
+      .btn-secondary {
+        background: var(--surface2);
+        color: var(--muted);
+        border: 1px solid var(--border);
+      }
+
+      .btn-secondary:hover {
+        color: var(--text);
+        border-color: #444;
+      }
+
+      .error {
+        font-family: var(--mono);
+        font-size: 12px;
+        color: var(--bad);
+        margin-top: 8px;
+        display: none;
+      }
+
+      #output {
+        display: none;
+      }
+
+      .pkg-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin: 2.5rem 0 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .pkg-header h2 {
+        font-family: var(--mono);
+        font-size: 13px;
+        color: var(--accent);
+        font-weight: 600;
+      }
+
+      .pkg-header .meta {
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--muted);
+      }
+
+      .summary-row {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 1.5rem;
+      }
+
+      .stat-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 12px 16px;
+        min-width: 140px;
+      }
+
+      .stat-card .slabel {
+        font-family: var(--mono);
+        font-size: 10px;
+        color: var(--text);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        margin-bottom: 4px;
+      }
+
+      .stat-card .sval {
+        font-family: var(--mono);
+        font-size: 18px;
+        font-weight: 600;
+        line-height: 1.2;
+      }
+
+      .stat-card .sval.good {
+        color: var(--good);
+      }
+      .stat-card .sval.bad {
+        color: var(--bad);
+      }
+
+      .stat-card .simpl {
+        font-family: var(--mono);
+        font-size: 10px;
+        color: var(--text);
+        margin-top: 2px;
+      }
+
+      .chart-block {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .chart-title {
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--text);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-bottom: 1rem;
+      }
+
+      .legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 1rem;
+      }
+
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--text);
+      }
+
+      .legend-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 2px;
+        flex-shrink: 0;
+      }
+
+      .divider {
+        border: none;
+        border-top: 1px solid var(--border);
+        margin: 2.5rem 0;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>py<span>bench</span></h1>
+      <p>paste your pyperf json · visualize instantly</p>
+    </header>
+
+    <div class="input-row">
+      <div class="input-area">
+        <label>time &middot; pyperf json</label>
+        <textarea
+          id="input-time"
+          placeholder='{ "benchmarks": [...], "metadata": { "unit": "second" } }'
+        ></textarea>
+      </div>
+      <div class="input-area">
+        <label>memory &middot; pyperf json</label>
+        <textarea
+          id="input-mem"
+          placeholder='{ "benchmarks": [...], "metadata": { "unit": "byte" } }'
+        ></textarea>
+      </div>
+    </div>
+    <div class="btn-row" style="margin-top: 10px">
+      <button class="btn-primary" onclick="visualize()">Visualize</button>
+      <button class="btn-secondary" onclick="clearAll()">Clear</button>
+    </div>
+    <div class="error" id="error"></div>
+
+    <div id="output"></div>
+
+    <script>
+      const COLORS = [
+        { border: "#c8f542", bg: "rgba(200,245,66,0.18)" },
+        { border: "#42f5c8", bg: "rgba(66,245,200,0.18)" },
+        { border: "#f5a142", bg: "rgba(245,161,66,0.18)" },
+        { border: "#a142f5", bg: "rgba(161,66,245,0.18)" },
+        { border: "#f542a1", bg: "rgba(245,66,161,0.18)" },
+        { border: "#42a1f5", bg: "rgba(66,161,245,0.18)" },
+        { border: "#f5f542", bg: "rgba(245,245,66,0.18)" },
+        { border: "#f54242", bg: "rgba(245,66,66,0.18)" },
+      ];
+
+      // Convert raw seconds to human readable
+      function humanSec(v) {
+        if (v < 1e-6) return (v * 1e9).toFixed(2) + "ns";
+        if (v < 1e-3) return (v * 1e6).toFixed(2) + "µs";
+        if (v < 1) return (v * 1e3).toFixed(2) + "ms";
+        return v.toFixed(4) + "s";
+      }
+
+      // Convert raw bytes to human readable
+      function humanBytes(v) {
+        if (v >= 1024 * 1024) return (v / (1024 * 1024)).toFixed(2) + " MiB";
+        if (v >= 1024) return (v / 1024).toFixed(2) + " KiB";
+        return Math.round(v) + " B";
+      }
+
+      function humanVal(v, unit) {
+        return unit === "byte" ? humanBytes(v) : humanSec(v);
+      }
+
+      // Compute mean and stdev from a flat array of numbers
+      function stats(values) {
+        const n = values.length;
+        if (n === 0) return { mean: 0, stdev: 0, cv: 0 };
+        const mean = values.reduce((a, b) => a + b, 0) / n;
+        const variance = values.reduce((a, b) => a + (b - mean) ** 2, 0) / n;
+        const stdev = Math.sqrt(variance);
+        const cv = mean > 0 ? (stdev / mean) * 100 : 0; // coefficient of variation in %
+        return { mean, stdev, cv };
+      }
+
+      // Parse pyperf JSON into a normalised structure
+      function parsePyperf(text) {
+        let json;
+        try {
+          json = JSON.parse(text);
+        } catch (e) {
+          return null;
+        }
+
+        if (!json.benchmarks || !Array.isArray(json.benchmarks)) return null;
+
+        const unit = json.metadata?.unit || "second";
+
+        const benchmarks = json.benchmarks.map((b) => {
+          const name = b.metadata?.name || "unnamed";
+          // Flatten all values across all runs
+          const allValues = (b.runs || []).flatMap((r) => r.values || []);
+          const { mean, stdev, cv } = stats(allValues);
+          return { name, mean, stdev, cv, sampleCount: allValues.length };
+        });
+
+        if (benchmarks.length === 0) return null;
+
+        if (unit === "byte") {
+          // For memory: find noop, subtract its mean from all others, then drop it from the chart
+          const noopIdx = benchmarks.findIndex((b) => b.name === "noop");
+          const noopMean = noopIdx !== -1 ? benchmarks[noopIdx].mean : 0;
+          const filtered = benchmarks.filter((_, i) => i !== noopIdx);
+          filtered.forEach((b) => {
+            b.rawMean = b.mean;
+            b.mean = Math.max(0, b.mean - noopMean); // net allocation above noop baseline
+          });
+          // % change vs the smallest mean after noop subtraction (first entry)
+          const baseMean = filtered[0]?.mean || 0;
+          filtered.forEach((b) => {
+            b.pctVsBase =
+              baseMean > 0 ? ((b.mean - baseMean) / baseMean) * 100 : 0;
+          });
+          return { benchmarks: filtered, unit, noopMean };
+        }
+
+        // For time: first benchmark is the baseline
+        const baseMean = benchmarks[0].mean;
+        benchmarks.forEach((b) => {
+          b.pctVsBase =
+            baseMean > 0 ? ((b.mean - baseMean) / baseMean) * 100 : 0;
+        });
+
+        return { benchmarks, unit };
+      }
+
+      let chartInstances = [];
+
+      function clearCharts() {
+        chartInstances.forEach((c) => c.destroy());
+        chartInstances = [];
+      }
+
+      // Shared render function for any parsed pyperf data
+      function renderSection(parsed, output, chartId, legendId) {
+        const { benchmarks, unit } = parsed;
+        const baseline = benchmarks[0];
+        const isTime = unit !== "byte";
+        const unitLabel = isTime ? "sec/op" : "B/op";
+        const bestLabel = isTime ? "fastest" : "lowest memory";
+
+        // --- Header ---
+        const header = document.createElement("div");
+        header.className = "pkg-header";
+        header.innerHTML = `
+    <h2>${unitLabel}</h2>
+    <span class="meta">${benchmarks.length} implementations &middot; ${baseline.sampleCount} samples each</span>
+  `;
+        output.appendChild(header);
+
+        // --- Summary cards ---
+        const summaryRow = document.createElement("div");
+        summaryRow.className = "summary-row";
+
+        summaryRow.innerHTML += `
+    <div class="stat-card">
+      <div class="slabel">baseline</div>
+      <div class="sval">${humanVal(baseline.mean, unit)}</div>
+      <div class="simpl">${baseline.name}</div>
+    </div>`;
+
+        if (parsed.noopMean != null) {
+          summaryRow.innerHTML += `
+      <div class="stat-card">
+        <div class="slabel">noop overhead</div>
+        <div class="sval">${humanVal(parsed.noopMean, unit)}</div>
+        <div class="simpl">subtracted from all</div>
+      </div>`;
+        }
+
+        const nonBase = benchmarks.slice(1);
+        if (nonBase.length > 0) {
+          const best = nonBase.reduce((a, b) =>
+            b.pctVsBase < a.pctVsBase ? b : a,
+          );
+          const worst = nonBase.reduce((a, b) =>
+            b.pctVsBase > a.pctVsBase ? b : a,
+          );
+
+          summaryRow.innerHTML += `
+      <div class="stat-card">
+        <div class="slabel">best vs baseline</div>
+        <div class="sval ${best.pctVsBase < 0 ? "good" : "bad"}">${best.pctVsBase > 0 ? "+" : ""}${best.pctVsBase.toFixed(1)}%</div>
+        <div class="simpl">${best.name}</div>
+      </div>`;
+
+          if (worst.name !== best.name) {
+            summaryRow.innerHTML += `
+        <div class="stat-card">
+          <div class="slabel">worst vs baseline</div>
+          <div class="sval ${worst.pctVsBase > 0 ? "bad" : "good"}">${worst.pctVsBase > 0 ? "+" : ""}${worst.pctVsBase.toFixed(1)}%</div>
+          <div class="simpl">${worst.name}</div>
+        </div>`;
+          }
+        }
+
+        const best = benchmarks.reduce((a, b) => (b.mean < a.mean ? b : a));
+        summaryRow.innerHTML += `
+    <div class="stat-card">
+      <div class="slabel">${bestLabel}</div>
+      <div class="sval good">${humanVal(best.mean, unit)}</div>
+      <div class="simpl">${best.name}</div>
+    </div>`;
+
+        output.appendChild(summaryRow);
+
+        // --- Chart ---
+        const block = document.createElement("div");
+        block.className = "chart-block";
+        const chartH = Math.max(300, benchmarks.length * 38 + 100);
+        block.innerHTML = `
+    <div class="chart-title">mean &middot; ${unitLabel}</div>
+    <div style="position:relative;width:100%;height:${chartH}px;">
+      <canvas id="${chartId}"></canvas>
+    </div>
+    <div class="legend" id="${legendId}"></div>
+  `;
+        output.appendChild(block);
+
+        requestAnimationFrame(() => {
+          Chart.register(ChartDataLabels);
+          const ctx = document.getElementById(chartId)?.getContext("2d");
+          if (!ctx) return;
+
+          const datasets = [
+            {
+              label: "mean",
+              data: benchmarks.map((b) => b.mean),
+              backgroundColor: benchmarks.map(
+                (_, i) => COLORS[i % COLORS.length].bg,
+              ),
+              borderColor: benchmarks.map(
+                (_, i) => COLORS[i % COLORS.length].border,
+              ),
+              borderWidth: 1.5,
+              borderRadius: 4,
+            },
+          ];
+
+          const chart = new Chart(ctx, {
+            type: "bar",
+            data: { labels: benchmarks.map((b) => b.name), datasets },
+            options: {
+              indexAxis: "y",
+              responsive: true,
+              maintainAspectRatio: false,
+              layout: { padding: { right: 10 } },
+              plugins: {
+                legend: { display: false },
+                tooltip: { enabled: false },
+                datalabels: {
+                  anchor: "start",
+                  align: "end",
+                  clamp: true,
+                  color: (ctx) => COLORS[ctx.dataIndex % COLORS.length].border,
+                  font: {
+                    family: "'JetBrains Mono', monospace",
+                    size: 10,
+                    weight: "600",
+                  },
+                  formatter: (val, ctx) => {
+                    if (val == null) return "";
+                    const b = benchmarks[ctx.dataIndex];
+                    const pctStr =
+                      b.pctVsBase === 0
+                        ? "baseline"
+                        : `${b.pctVsBase > 0 ? "+" : ""}${b.pctVsBase.toFixed(1)}%`;
+                    const cvPart = isTime ? `  ±${b.cv.toFixed(1)}%` : "";
+                    return `${b.name}   ${humanVal(b.mean, unit)}  (${pctStr})${cvPart}`;
+                  },
+                  padding: { left: 8 },
+                  textAlign: "left",
+                },
+              },
+              scales: {
+                x: {
+                  ticks: {
+                    color: "#555",
+                    font: { family: "'JetBrains Mono', monospace", size: 10 },
+                    callback: (v) => humanVal(v, unit),
+                  },
+                  grid: { color: "rgba(255,255,255,0.05)" },
+                },
+                y: {
+                  ticks: { display: false },
+                  grid: { color: "transparent" },
+                },
+              },
+            },
+          });
+
+          chartInstances.push(chart);
+
+          const legendEl = document.getElementById(legendId);
+          if (legendEl) {
+            legendEl.innerHTML = benchmarks
+              .map(
+                (b, i) =>
+                  `<span class="legend-item"><span class="legend-dot" style="background:${COLORS[i % COLORS.length].border}"></span>${b.name}</span>`,
+              )
+              .join("");
+          }
+        });
+      }
+
+      function visualize() {
+        const timeText = document.getElementById("input-time").value.trim();
+        const memText = document.getElementById("input-mem").value.trim();
+        const errEl = document.getElementById("error");
+        const output = document.getElementById("output");
+
+        errEl.style.display = "none";
+        clearCharts();
+        output.innerHTML = "";
+
+        if (!timeText && !memText) {
+          errEl.style.display = "block";
+          errEl.textContent = "Paste at least one JSON (time or memory).";
+          return;
+        }
+
+        let rendered = false;
+
+        if (timeText) {
+          const parsed = parsePyperf(timeText);
+          if (!parsed) {
+            errEl.style.display = "block";
+            errEl.textContent = "Could not parse time JSON.";
+          } else {
+            output.style.display = "block";
+            renderSection(parsed, output, "chart-time", "legend-time");
+            rendered = true;
+          }
+        }
+
+        if (memText) {
+          const parsed = parsePyperf(memText);
+          if (!parsed) {
+            errEl.style.display = "block";
+            errEl.textContent =
+              (errEl.style.display === "block" ? errEl.textContent + " " : "") +
+              "Could not parse memory JSON.";
+          } else {
+            if (rendered) {
+              const hr = document.createElement("hr");
+              hr.className = "divider";
+              output.appendChild(hr);
+            }
+            output.style.display = "block";
+            renderSection(parsed, output, "chart-mem", "legend-mem");
+          }
+        }
+      }
+
+      function clearAll() {
+        document.getElementById("input-time").value = "";
+        document.getElementById("input-mem").value = "";
+        clearCharts();
+        document.getElementById("output").style.display = "none";
+        document.getElementById("output").innerHTML = "";
+        document.getElementById("error").style.display = "none";
+      }
+
+      ["input-time", "input-mem"].forEach((id) => {
+        document.getElementById(id).addEventListener("keydown", (e) => {
+          if ((e.ctrlKey || e.metaKey) && e.key === "Enter") visualize();
+        });
+      });
+    </script>
+  </body>
+</html>

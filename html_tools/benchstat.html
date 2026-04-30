@@ -1,0 +1,637 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>benchstat visualizer</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Syne:wght@400;700;800&display=swap");
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        --bg: #0d0d0d;
+        --surface: #161616;
+        --surface2: #1e1e1e;
+        --border: #2a2a2a;
+        --accent: #c8f542;
+        --accent2: #42f5c8;
+        --text: #f0f0f0;
+        --muted: #666;
+        --good: #42f5c8;
+        --bad: #f5426e;
+        --mono: "JetBrains Mono", monospace;
+        --sans: "Syne", sans-serif;
+      }
+
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: var(--sans);
+        min-height: 100vh;
+        padding: 2rem;
+      }
+
+      header {
+        display: flex;
+        align-items: baseline;
+        gap: 1rem;
+        margin-bottom: 2.5rem;
+      }
+
+      header h1 {
+        font-size: 2rem;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+      }
+
+      header h1 span {
+        color: var(--accent);
+      }
+
+      header p {
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--muted);
+      }
+
+      .input-area {
+        position: relative;
+        margin-bottom: 2rem;
+      }
+
+      .input-area label {
+        display: block;
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-bottom: 8px;
+      }
+
+      textarea {
+        width: 100%;
+        height: 180px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        color: var(--text);
+        font-family: var(--mono);
+        font-size: 12px;
+        line-height: 1.6;
+        padding: 1rem;
+        resize: vertical;
+        outline: none;
+        transition: border-color 0.2s;
+      }
+
+      textarea:focus {
+        border-color: var(--accent);
+      }
+      textarea::placeholder {
+        color: var(--muted);
+      }
+
+      .btn-row {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+      }
+
+      button {
+        font-family: var(--mono);
+        font-size: 12px;
+        font-weight: 600;
+        padding: 8px 20px;
+        border-radius: 4px;
+        border: none;
+        cursor: pointer;
+        transition:
+          opacity 0.15s,
+          transform 0.1s;
+      }
+
+      button:active {
+        transform: scale(0.97);
+      }
+
+      .btn-primary {
+        background: var(--accent);
+        color: #0d0d0d;
+      }
+
+      .btn-primary:hover {
+        opacity: 0.88;
+      }
+
+      .btn-secondary {
+        background: var(--surface2);
+        color: var(--muted);
+        border: 1px solid var(--border);
+      }
+
+      .btn-secondary:hover {
+        color: var(--text);
+        border-color: #444;
+      }
+
+      .error {
+        font-family: var(--mono);
+        font-size: 12px;
+        color: var(--bad);
+        margin-top: 8px;
+        display: none;
+      }
+
+      /* Output */
+      #output {
+        display: none;
+      }
+
+      .pkg-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin: 2.5rem 0 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--border);
+      }
+
+      .pkg-header h2 {
+        font-family: var(--mono);
+        font-size: 13px;
+        color: var(--accent);
+        font-weight: 600;
+      }
+
+      .pkg-header .cpu {
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--muted);
+      }
+
+      .section-label {
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-bottom: 1rem;
+      }
+
+      .summary-row {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 1.5rem;
+      }
+
+      .stat-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 12px 16px;
+        min-width: 140px;
+      }
+
+      .stat-card .slabel {
+        font-family: var(--mono);
+        font-size: 10px;
+        color: var(--text);
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        margin-bottom: 4px;
+      }
+
+      .stat-card .sval {
+        font-family: var(--mono);
+        font-size: 18px;
+        font-weight: 600;
+        line-height: 1.2;
+      }
+
+      .stat-card .sval.good {
+        color: var(--good);
+      }
+      .stat-card .sval.bad {
+        color: var(--bad);
+      }
+      .stat-card .simpl {
+        font-family: var(--mono);
+        font-size: 10px;
+        color: var(--text);
+        margin-top: 2px;
+      }
+
+      .chart-block {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+      }
+
+      .chart-title {
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--text);
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-bottom: 1rem;
+      }
+
+      .legend {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 1rem;
+      }
+
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-family: var(--mono);
+        font-size: 11px;
+        color: var(--text);
+      }
+
+      .legend-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 2px;
+        flex-shrink: 0;
+      }
+
+      .divider {
+        border: none;
+        border-top: 1px solid var(--border);
+        margin: 2.5rem 0;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1>bench<span>stat</span></h1>
+      <p>paste your analysis.txt · visualize instantly</p>
+    </header>
+
+    <div class="input-area">
+      <label>paste analysis.txt contents</label>
+      <textarea
+        id="input"
+        placeholder="goos: linux&#10;goarch: amd64&#10;pkg: your/package&#10;..."
+      ></textarea>
+      <div class="btn-row">
+        <button class="btn-primary" onclick="visualize()">Visualize</button>
+        <button class="btn-secondary" onclick="clearAll()">Clear</button>
+      </div>
+      <div class="error" id="error">
+        Could not parse any benchmark data. Make sure you paste valid benchstat
+        output.
+      </div>
+    </div>
+
+    <div id="output"></div>
+
+    <script>
+      const COLORS = [
+        { border: "#c8f542", bg: "rgba(200,245,66,0.18)" },
+        { border: "#42f5c8", bg: "rgba(66,245,200,0.18)" },
+        { border: "#f5a142", bg: "rgba(245,161,66,0.18)" },
+        { border: "#a142f5", bg: "rgba(161,66,245,0.18)" },
+        { border: "#f542a1", bg: "rgba(245,66,161,0.18)" },
+        { border: "#42a1f5", bg: "rgba(66,161,245,0.18)" },
+        { border: "#f5f542", bg: "rgba(245,245,66,0.18)" },
+        { border: "#f54242", bg: "rgba(245,66,66,0.18)" },
+      ];
+
+      function parseUnit(str) {
+        if (!str) return 0;
+        str = str.trim();
+        const m = str.match(/^([\d.]+)(µ|Ki|Mi|Gi|n|m|k|M|G)?/);
+        if (!m) return 0;
+        let v = parseFloat(m[1]);
+        if (m[2] === "n") v *= 1e-9;
+        else if (m[2] === "µ") v *= 1e-6;
+        else if (m[2] === "m") v *= 1e-3;
+        else if (m[2] === "k") v *= 1e3;
+        else if (m[2] === "M") v *= 1e6;
+        else if (m[2] === "G") v *= 1e9;
+        else if (m[2] === "Ki") v *= 1024;
+        else if (m[2] === "Mi") v *= 1024 * 1024;
+        else if (m[2] === "Gi") v *= 1024 * 1024 * 1024;
+        return v;
+      }
+
+      function humanVal(v, unit) {
+        if (unit === "sec/op") {
+          if (v < 1e-3) return (v * 1e6).toFixed(2) + "µs";
+          if (v < 1) return (v * 1e3).toFixed(2) + "ms";
+          return v.toFixed(4) + "s";
+        }
+        if (unit === "B/op") {
+          if (v >= 1e6) return (v / 1e6).toFixed(2) + " MB";
+          if (v >= 1e3) return (v / 1e3).toFixed(1) + " KB";
+          return Math.round(v) + " B";
+        }
+        return v % 1 === 0 ? Math.round(v).toString() : v.toFixed(2);
+      }
+
+      function parseBenchstat(text) {
+        const lines = text.split("\n");
+        const pkgLine = lines.find((l) => l.startsWith("pkg:"));
+        const cpuLine = lines.find((l) => l.startsWith("cpu:"));
+        const pkg = pkgLine ? pkgLine.replace("pkg:", "").trim() : "unknown";
+        const cpu = cpuLine ? cpuLine.replace("cpu:", "").trim() : "";
+
+        const sections = [];
+        let i = 0;
+
+        while (i < lines.length) {
+          const line = lines[i];
+          if (!line.includes("│")) {
+            i++;
+            continue;
+          }
+
+          const cells = line
+            .split("│")
+            .map((c) => c.trim())
+            .filter(Boolean);
+          if (cells.length < 2) {
+            i++;
+            continue;
+          }
+
+          // Check next line for unit row
+          const nextLine = lines[i + 1] || "";
+          if (!nextLine.includes("│")) {
+            i++;
+            continue;
+          }
+          const unitCells = nextLine
+            .split("│")
+            .map((c) => c.trim())
+            .filter(Boolean);
+          const unitStr = unitCells[0] || "";
+          const knownUnits = ["sec/op", "B/op", "allocs/op"];
+          const unit = knownUnits.find((u) => unitStr.includes(u));
+          if (!unit) {
+            i++;
+            continue;
+          }
+
+          const impls = cells;
+          i += 2;
+
+          const benchmarks = [];
+          while (i < lines.length) {
+            const bline = lines[i].trim();
+            if (!bline) {
+              i++;
+              break;
+            }
+            if (bline.startsWith("¹")) {
+              i++;
+              continue;
+            }
+            if (bline.includes("│")) break;
+
+            const valRx = /([\d.]+(?:Ki|Mi|Gi|µ|n|m|k|M|G)?)\s*±\s*[\d]+%/g;
+            const vals = [];
+            let m;
+            while ((m = valRx.exec(bline)) !== null) vals.push(parseUnit(m[1]));
+
+            if (vals.length >= 1) {
+              // name = everything before first big number
+              const nameMatch = bline.match(/^([A-Za-z_][A-Za-z0-9_/]*)/);
+              const name = nameMatch
+                ? nameMatch[1]
+                : `bench${benchmarks.length}`;
+              benchmarks.push({ name, values: vals });
+            }
+            i++;
+          }
+
+          if (benchmarks.length) sections.push({ unit, impls, benchmarks });
+        }
+
+        return { pkg, cpu, sections };
+      }
+
+      let chartInstances = [];
+
+      function clearCharts() {
+        chartInstances.forEach((c) => c.destroy());
+        chartInstances = [];
+      }
+
+      function visualize() {
+        const text = document.getElementById("input").value.trim();
+        const errEl = document.getElementById("error");
+        const output = document.getElementById("output");
+        errEl.style.display = "none";
+        clearCharts();
+        output.innerHTML = "";
+
+        if (!text) {
+          errEl.style.display = "block";
+          errEl.textContent = "Please paste some content first.";
+          return;
+        }
+
+        // Support multiple pkg blocks — split on 'goos:'
+        const blocks = text.split(/(?=goos:)/g).filter((b) => b.trim());
+        const parsed = blocks
+          .map(parseBenchstat)
+          .filter((p) => p.sections.length > 0);
+
+        if (!parsed.length) {
+          errEl.style.display = "block";
+          errEl.textContent = "Could not parse any benchmark data.";
+          return;
+        }
+
+        output.style.display = "block";
+
+        parsed.forEach((pkg, pi) => {
+          if (pi > 0) {
+            const hr = document.createElement("hr");
+            hr.className = "divider";
+            output.appendChild(hr);
+          }
+
+          const header = document.createElement("div");
+          header.className = "pkg-header";
+          header.innerHTML = `<h2>${pkg.pkg}</h2>${pkg.cpu ? `<span class="cpu">${pkg.cpu}</span>` : ""}`;
+          output.appendChild(header);
+
+          pkg.sections.forEach((section) => {
+            // Summary cards
+            const summaryRow = document.createElement("div");
+            summaryRow.className = "summary-row";
+
+            const base = section.benchmarks[0]?.values[0];
+            if (base !== undefined) {
+              summaryRow.innerHTML += `<div class="stat-card"><div class="slabel">baseline · ${section.impls[0]}</div><div class="sval">${humanVal(base, section.unit)}</div><div class="simpl">${section.benchmarks[0]?.name || ""}</div></div>`;
+            }
+
+            let bestPct = null,
+              worstPct = null,
+              bestImpl = "",
+              worstImpl = "";
+            section.benchmarks.forEach((b) => {
+              if (b.values.length < 2) return;
+              const bv = b.values[0];
+              b.values.slice(1).forEach((v, i) => {
+                if (!bv) return;
+                const pct = ((v - bv) / bv) * 100;
+                if (bestPct === null || pct < bestPct) {
+                  bestPct = pct;
+                  bestImpl = section.impls[i + 1];
+                }
+                if (worstPct === null || pct > worstPct) {
+                  worstPct = pct;
+                  worstImpl = section.impls[i + 1];
+                }
+              });
+            });
+
+            if (bestPct !== null) {
+              summaryRow.innerHTML += `<div class="stat-card"><div class="slabel">best improvement</div><div class="sval good">${bestPct.toFixed(1)}%</div><div class="simpl">${bestImpl}</div></div>`;
+            }
+            if (worstPct !== null && worstImpl !== bestImpl) {
+              const cls = worstPct > 0 ? "bad" : "good";
+              summaryRow.innerHTML += `<div class="stat-card"><div class="slabel">worst change</div><div class="sval ${cls}">${worstPct > 0 ? "+" : ""}${worstPct.toFixed(1)}%</div><div class="simpl">${worstImpl}</div></div>`;
+            }
+
+            output.appendChild(summaryRow);
+
+            // Chart
+            const block = document.createElement("div");
+            block.className = "chart-block";
+
+            const h = Math.max(
+              300,
+              section.benchmarks.length * section.impls.length * 38 + 100,
+            );
+            block.innerHTML = `
+        <div class="chart-title">${section.unit}</div>
+        <div style="position:relative;width:100%;height:${h}px;">
+          <canvas id="chart-${pi}-${section.unit.replace("/", "_")}"></canvas>
+        </div>
+        <div class="legend" id="legend-${pi}-${section.unit.replace("/", "_")}"></div>
+      `;
+            output.appendChild(block);
+
+            const canvasId = `chart-${pi}-${section.unit.replace("/", "_")}`;
+            const legendId = `legend-${pi}-${section.unit.replace("/", "_")}`;
+
+            requestAnimationFrame(() => {
+              const ctx = document.getElementById(canvasId)?.getContext("2d");
+              if (!ctx) return;
+
+              const datasets = section.impls.map((impl, i) => ({
+                label: impl,
+                data: section.benchmarks.map((b) => b.values[i] ?? null),
+                backgroundColor: COLORS[i % COLORS.length].bg,
+                borderColor: COLORS[i % COLORS.length].border,
+                borderWidth: 1.5,
+                borderRadius: 4,
+              }));
+
+              Chart.register(ChartDataLabels);
+
+              const chart = new Chart(ctx, {
+                type: "bar",
+                data: {
+                  labels: section.benchmarks.map((b) => b.name),
+                  datasets,
+                },
+                options: {
+                  indexAxis: "y",
+                  responsive: true,
+                  maintainAspectRatio: false,
+                  layout: { padding: { right: 10 } },
+                  plugins: {
+                    legend: { display: false },
+                    tooltip: { enabled: false },
+                    datalabels: {
+                      anchor: "start",
+                      align: "end",
+                      clamp: true,
+                      color: (ctx) =>
+                        COLORS[ctx.datasetIndex % COLORS.length].border,
+                      font: {
+                        family: "'JetBrains Mono', monospace",
+                        size: 10,
+                        weight: "600",
+                      },
+                      formatter: (val, ctx) => {
+                        if (val == null) return "";
+                        const name = section.impls[ctx.datasetIndex] || "";
+                        return `${name}   ${humanVal(val, section.unit)}`;
+                      },
+                      padding: { left: 8 },
+                      textAlign: "left",
+                    },
+                  },
+                  scales: {
+                    x: {
+                      ticks: {
+                        color: "#555",
+                        font: {
+                          family: "'JetBrains Mono', monospace",
+                          size: 10,
+                        },
+                        callback: (v) => humanVal(v, section.unit),
+                      },
+                      grid: { color: "rgba(255,255,255,0.05)" },
+                    },
+                    y: {
+                      ticks: { display: false },
+                      grid: { color: "transparent" },
+                    },
+                  },
+                },
+              });
+              chartInstances.push(chart);
+
+              const legendEl = document.getElementById(legendId);
+              if (legendEl) {
+                legendEl.innerHTML = datasets
+                  .map(
+                    (d, i) =>
+                      `<span class="legend-item"><span class="legend-dot" style="background:${COLORS[i % COLORS.length].border}"></span>${d.label}</span>`,
+                  )
+                  .join("");
+              }
+            });
+          });
+        });
+      }
+
+      function clearAll() {
+        document.getElementById("input").value = "";
+        clearCharts();
+        document.getElementById("output").style.display = "none";
+        document.getElementById("output").innerHTML = "";
+        document.getElementById("error").style.display = "none";
+      }
+
+      document.getElementById("input").addEventListener("keydown", (e) => {
+        if ((e.ctrlKey || e.metaKey) && e.key === "Enter") visualize();
+      });
+    </script>
+  </body>
+</html>
